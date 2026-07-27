@@ -16,13 +16,16 @@ export const FootballDashboard: React.FC = () => {
     // The queryKey tracks dependencies; changing selectedLeague triggers an auto-refetch
     queryKey: ['competitionMatches', selectedLeague], 
     queryFn: () => footballDashboardHub.getCompetitionMatches(selectedLeague, {
-      season: '2026', // Targets the upcoming 2026/2027 season
+       // Targets the upcoming 2026/2027 season
       status: 'SCHEDULED' // Safely queries future fixtures
     }),
-    staleTime: 1000 * 60 * 5, // Cache data for 5 minutes to avoid redundant API hits
+    staleTime: 1000 * 60 * 5,
+     refetchOnWindowFocus: false, 
+  retry: 1,     
+    
   });
 
-  // 3. Handle asynchronous UI states smoothly
+
   if (isLoading) {
     return <div className="p-8 text-center text-gray-500 animate-pulse">Loading fixtures...</div>;
   }
@@ -40,7 +43,7 @@ export const FootballDashboard: React.FC = () => {
       <header className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold text-gray-900">Upcoming Fixtures ({data?.competition.name})</h1>
         
-        {/* League Selector Switch */}
+        
         <select 
           className="border p-2 rounded bg-white shadow-sm font-medium"
           value={selectedLeague} 
