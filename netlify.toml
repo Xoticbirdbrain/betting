@@ -7,4 +7,5 @@ publish = "dist"
   to = "https://football-data.org"
   status = 200
   force = true
+  query = {competitions = ":competitions"}
   headers = { X-Auth-Token = "${env:VITE_FOOTBALL_API_KEY}" }
