@@ -7,3 +7,4 @@ publish = "dist"
   to = "https://football-data.org"
   status = 200
   force = true
+  headers = { X-Auth-Token = "${env:VITE_FOOTBALL_API_KEY}" }
