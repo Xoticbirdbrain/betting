@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { footballDashboardHub } from '@/api/endpoints';
 
 export const FootballDashboard: React.FC = () => {
-  // 1. Maintain state for user selections
+  
   const [selectedLeague, setSelectedLeague] = useState<string>('PL');
 
   
@@ -13,15 +13,33 @@ export const FootballDashboard: React.FC = () => {
     isError, 
     error 
   } = useQuery({
-    // The queryKey tracks dependencies; changing selectedLeague triggers an auto-refetch
+    
     queryKey: ['competitionMatches', selectedLeague], 
     queryFn: () => footballDashboardHub.getCompetitionMatches(selectedLeague, {
        // Targets the upcoming 2026/2027 season
-      status: 'SCHEDULED' // Safely queries future fixtures
+      
     }),
     staleTime: 1000 * 60 * 5,
      refetchOnWindowFocus: false, 
-  retry: 1,     
+  retry: 1,  
+  
+  select: (rawResponse) => {
+      if (!rawResponse || !rawResponse.matches) return rawResponse;
+      
+      const filteredMatches = rawResponse.matches.filter(
+        (match: any) => match.status === 'SCHEDULED'
+      );
+      
+      return {
+        ...rawResponse,
+        matches: filteredMatches
+      };
+    }
+  
+
+
+
+
     
   });
 
@@ -57,7 +75,6 @@ export const FootballDashboard: React.FC = () => {
         </select>
       </header>
 
-      {/* 4. Map safely through your strongly-typed matches array */}
       <div className="grid gap-4">
         {data?.matches && data.matches.length > 0 ? (
           data.matches.map((match) => (
