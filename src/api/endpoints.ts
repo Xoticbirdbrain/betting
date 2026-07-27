@@ -22,8 +22,11 @@ export const footballDashboardHub = {
   getCompetitionStandings: (id: string | number, params?: Types.GetStandingsParams) => 
     fetchFromHub<Types.StandingsResponse>(`/competitions/${id}/standings`, params),
 
-  getCompetitionMatches: (id: string | number, params?: Types.GetCompetitionMatchesParams) => 
-    fetchFromHub<Types.MatchesResponse>(`/competitions/${id}/matches`, params),
+  getCompetitionMatches: (id: string | number, params?: Types.GetCompetitionMatchesParams) => {
+    return fetchFromHub<Types.MatchesResponse>(`/matches`, { params,
+
+      competitions: id,
+    })},
 
   getCompetitionTeams: (id: string | number, params?: Types.GetTeamsParams) => 
     fetchFromHub<Types.TeamsResponse>(`/competitions/${id}/teams`, params),
