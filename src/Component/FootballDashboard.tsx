@@ -17,7 +17,9 @@ export const FootballDashboard: React.FC = () => {
     queryKey: ['competitionMatches', selectedLeague], 
     queryFn: () => footballDashboardHub.getCompetitionMatches(selectedLeague, {
        // Targets the upcoming 2026/2027 season
-      
+      season: '2026',
+      status: 'SCHEDULED'
+
     }),
     staleTime: 1000 * 60 * 5,
      refetchOnWindowFocus: false, 
