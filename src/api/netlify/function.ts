@@ -19,7 +19,7 @@ const handler: Handler = async (event: HandlerEvent) => {
       ? `?${new URLSearchParams(queryParams)}` 
       : "";
       
-    const url = `https://api.football-data.org${path}${query}`;
+    const url = `https://api.football-data.org/v4${path}${query}`;
 
     const res = await fetch(url, {
       method: event.httpMethod,
