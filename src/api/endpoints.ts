@@ -23,7 +23,7 @@ export const footballDashboardHub = {
     fetchFromHub<Types.StandingsResponse>(`/competitions/${id}/standings`, params),
 
   getCompetitionMatches: (id: string | number, params?: Types.GetCompetitionMatchesParams) => 
-   fetchFromHub<Types.MatchesResponse>(`/competition/${id}/matches`, params),
+   fetchFromHub<Types.MatchesResponse>(`/competitions/${id}/matches`, params),
 
   getCompetitionTeams: (id: string | number, params?: Types.GetTeamsParams) => 
     fetchFromHub<Types.TeamsResponse>(`/competitions/${id}/teams`, params),
