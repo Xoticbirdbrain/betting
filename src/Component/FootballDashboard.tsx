@@ -5,7 +5,6 @@ import type {GetGlobalMatchesParams} from '@/api/types'
 
 
 
-
 export interface Match {
   id: number;
   utcDate: string;
