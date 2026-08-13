@@ -3,6 +3,13 @@ import type { Handler, HandlerEvent } from '@netlify/functions';
 const handler: Handler = async (event: HandlerEvent) => {
   try {
     const key = process.env.FOOTBALL_API_KEY;
+
+     console.log("---- SERVERLESS AUTH CHECK ----");
+    console.log("Detected Key Value:", key ? `Valid (${key.substring(0, 4)}...)` : "⚠️ ABSOLUTELY MISSING");
+    console.log("Full Proxy Target URL:", `https://football-data.org{event.path.replace("/api", "")}`);
+    console.log("-------------------------------");
+
+
     if (!key) {
       return {
         statusCode: 500,
@@ -11,7 +18,7 @@ const handler: Handler = async (event: HandlerEvent) => {
     }
 
     
-    const path = event.path.replace("/.netlify/functions/api", "");
+    const path = event.path.replace("/api", "");
     
   
     const queryParams = event.queryStringParameters as Record<string, string> | null;
@@ -24,8 +31,8 @@ const handler: Handler = async (event: HandlerEvent) => {
     const res = await fetch(url, {
       method: event.httpMethod,
       headers: {
-        "X-Auth-Token": key, // Fixed casing (changed 'Key' to 'key')
-        "Content-Type": "application/json" // Fixed typo 'appliation/json'
+        "X-Auth-Token": key, 
+        "Content-Type": "application/json" 
       },
       body: event.body || undefined
     });

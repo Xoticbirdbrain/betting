@@ -2,7 +2,6 @@ import { fetchFromHub } from './FootballApi';
 import * as Types from './types.ts';
 
 
-{/* All other End Points to be used at a later stage - Luke Spandill */}
 
 export const footballDashboardHub = {
 

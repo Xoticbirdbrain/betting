@@ -54,8 +54,8 @@ export interface GetPersonMatchesParams {
 }
 
 export interface GetGlobalMatchesParams {
-  competitions?: string; // Comma-separated list of competition IDs (e.g., "PL,BL1")
-  ids?: string;          // Comma-separated list of match IDs
+  competitions?: string; 
+  ids?: string;          
   dateFrom?: string;
   dateTo?: string;
   status?: string;

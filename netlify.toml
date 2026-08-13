@@ -3,6 +3,13 @@ command = "npm run build"
 publish = "dist"
 
 [functions]
-directory = 'netlify/functions'
-  
-  
+directory = "src/api/netlify"
+
+[[redirects]]
+from = "api/*"
+to = "/.netlify/functions/api"
+status = 200  
+
+[dev]
+port = 8888
+targetPort = 5173

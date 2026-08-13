@@ -3,10 +3,10 @@ import axios from 'axios';
 
 export const api = axios.create({
 
-  baseURL: '/.netlify/function/api', 
+  baseURL: '/api', 
   
   headers: {
-     
+    
     'Content-Type': 'application/json'
 
   }

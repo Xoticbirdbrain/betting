@@ -42,7 +42,7 @@
   },
   "allowScripts": {
     "netlify-cli": true,
-    "esbuild": true,
-    "sharp": true
+    "sharp": true,
+    "esbuild@0.28.1": true
   }
 }
