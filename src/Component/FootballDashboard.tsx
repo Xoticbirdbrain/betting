@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+
 import { useQuery } from '@tanstack/react-query';
 import { footballDashboardHub } from '@/api/endpoints';
 import type {GetGlobalMatchesParams} from '@/api/types'
