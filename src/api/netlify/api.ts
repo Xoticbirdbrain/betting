@@ -13,15 +13,30 @@ const handler: Handler = async (event: HandlerEvent): Promise<HandlerResponse> =
       };
     }
 
-    const path = event.path.replace(/^\/api/, "");
+    // Resolves both direct /api calls and internal Netlify function system paths
+    let cleanPath = event.path;
+    if (cleanPath.includes('/.netlify/functions/')) {
+      const parts = cleanPath.split(/\/\.netlify\/functions\/[^\/]+/);
+      cleanPath = parts[1] || "";
+    } else {
+      cleanPath = cleanPath.replace(/^\/api/, "");
+    }
+
+    if (!cleanPath) {
+      return {
+        statusCode: 400,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ error: "Invalid API resource path specified" })
+      };
+    }
+
     const queryParams = event.queryStringParameters as Record<string, string> | null;
     const query = queryParams && Object.keys(queryParams).length > 0 
       ? `?${new URLSearchParams(queryParams)}` 
       : "";
       
-    const url = `https://api.football-data.org/v4${path}${query}`;
+    const url = `https://api.football-data.org/v4${cleanPath}${query}`;
 
-    
     return new Promise<HandlerResponse>((resolve) => {
       https.get(url, {
         headers: {
@@ -62,4 +77,5 @@ const handler: Handler = async (event: HandlerEvent): Promise<HandlerResponse> =
 };
 
 export { handler };
+
 
