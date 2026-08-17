@@ -2,7 +2,15 @@
 import { useQuery } from '@tanstack/react-query';
 import { footballDashboardHub } from '@/api/endpoints';
 
-
+export interface GetCompetitionMatchesParams {
+  dateFrom?: string; 
+  dateTo?: string;  
+  stage?: string;    // e.g., "REGULAR_SEASON", "PLAYOFFS"
+  status?: 'SCHEDULED' | 'LIVE' | 'IN_PLAY' | 'PAUSED' | 'FINISHED' | 'POSTPONED' | 'SUSPENDED' | 'CANCELLED';
+  matchday?: number;
+  group?: string;
+  season?: string;   //(e.g., "2026")
+}
 
 
 export interface Match {
@@ -36,8 +44,8 @@ export const FootballDashboard: React.FC = () => {
     const formatDate = (date: Date) => date.toISOString().split('T')[0];
     
 
-   return footballDashboardHub.getMatches( {
-      competitions: 'PL',
+   return footballDashboardHub.getCompetitionMatches('PL',{
+      
       dateFrom: formatDate(today),
       dateTo: formatDate(sixDaysLater)
 
@@ -77,8 +85,8 @@ if (isError) {
         <h1 className="text-2xl text-center font-bold text-gray-900">Upcoming Fixtures This Week</h1>
         
       </header>
-
-      <div className="grid gap-4">
+ 
+    <div className="grid  gap-4">
         {data?.matches && data.matches.length > 0 ? (
           data.matches.map((match: Match) => (
             <div key={match.id} className="border p-4 rounded-lg bg-white shadow-sm flex justify-between items-center  sm:flex-col md:flex-col hover:shadow-md transition">
