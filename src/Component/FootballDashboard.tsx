@@ -1,7 +1,7 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { footballDashboardHub } from '@/api/endpoints';
-import type {GetGlobalMatchesParams} from '@/api/types'
+
 
 
 
@@ -24,76 +24,52 @@ export const FootballDashboard: React.FC = () => {
   
 
   
-  const { 
-    data, 
-    isLoading, 
-    isError, 
-    error 
-  } = useQuery({
+  const { data, isLoading, isError, error } = useQuery({
+  queryKey: ['globalMatches', 'PL'],
+  queryFn: () => {
+     const today = new Date();
+     const sixDaysLater = new Date();
     
-    queryKey: ['globalMatches',], 
-    queryFn: async (): Promise<MatchesResponse> => {
-       const today = new Date();
-    const sevenDaysLater = new Date();
-    sevenDaysLater.setDate(today.getDate() + 7);
+    
+    sixDaysLater.setDate(today.getDate() + 6); 
 
+    const formatDate = (date: Date) => date.toISOString().split('T')[0];
+    
+
+   return footballDashboardHub.getMatches( {
+      competitions: 'PL',
+      dateFrom: formatDate(today),
+      dateTo: formatDate(sixDaysLater)
+
+
+   });
   
-const formatDate = (date: Date) => date.toISOString().split('T')[0];
-const leagues = ['PL', 'BL1', 'PD', 'SA', 'FL1', 'CL'];
-
-   const fetchPromises = leagues.map(league => {
-      const queryparams: GetGlobalMatchesParams = {
-        competitions: league, // Pass one league code at a time
-        dateFrom: formatDate(today),
-        dateTo: formatDate(sevenDaysLater),
-        status: 'SCHEDULED' 
-      };
-      return footballDashboardHub.getMatches(queryparams);
-    });
-
-    
-    const responses = await Promise.all(fetchPromises);
-
-    
-    const combinedMatches = responses.reduce((acc, curr) => {
-      if (curr && curr.matches) {
-        return acc.concat(curr.matches);
-      }
-      return acc;
-    }, [] as any[]);
-
-    return { matches: combinedMatches };},
-    staleTime: 1000 * 60 * 10,
-     refetchOnWindowFocus: false, 
-  retry: 1,  
   
-  select:(rawResponse: any): MatchesResponse => {
-
-   if(!rawResponse || !rawResponse.matches)
-   {    return {matches: [] }      }
-
+  }
+  , 
+  staleTime: 1000 * 60 * 10,
+  refetchOnWindowFocus: false,
+  retry: 1,
+  select: (rawResponse: any): MatchesResponse => {
+    if (!rawResponse || !rawResponse.matches) {
+      return { matches: [] };
+    }
    return rawResponse;
   }
+});
+
+if (isLoading) {
+  return <div className="p-8 text-center text-gray-500 animate-pulse">Loading fixtures...</div>;
+}
+
+if (isError) {
+  return (
+    <div className="p-8 text-center text-red-500">
+      Error loading data: {error instanceof Error ? error.message : 'Unknown error'}
+    </div>
+  );
+}
   
-
-
-
-
-    
-  });
-
-
-  if (isLoading) {
-    return <div className="p-8 text-center text-gray-500 animate-pulse">Loading fixtures...</div>;
-  }
-
-  if (isError) {
-    return (
-      <div className="p-8 text-center text-red-500">
-        Error loading data: {error instanceof Error ? error.message : 'Unknown error'}
-      </div>
-    );
-  }
 
   return (
     <div className="p-6 max-w-5xl mx-auto">

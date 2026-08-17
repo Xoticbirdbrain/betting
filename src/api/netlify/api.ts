@@ -18,7 +18,8 @@ const handler: Handler = async (event: HandlerEvent) => {
     }
 
     
-    const path = event.path.replace("/api", "");
+    const cleanPath = event.path.split('/').pop(); 
+    const path = cleanPath ? `/${cleanPath}` : "/matches";
     
   
     const queryParams = event.queryStringParameters as Record<string, string> | null;
