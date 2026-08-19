@@ -7,26 +7,19 @@ import path from 'path'
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   resolve: {
-  alias: {
-
-
-     '@': path.resolve(__dirname, './src'),
-  },
-   
-
-  },
-   server: {
-    proxy: {
-      // Intercept any local call starting with '/api-sports'
-      '/api': {
-        target: 'https://api.football-data.org/v4', // Check your exact version endpoint
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, ''),
-      },
+    alias: {
+      '@': path.resolve(__dirname, './src'),
     },
   },
-   
-  
-  
-  
+  server: {
+    port: 5173,
+    strictPort: false, 
+    host: '127.0.0.1',
+    watch: {
+      // Prevents Vite from locking Netlify's temporary local folders
+      ignored: ['**/.netlify/**', '**/functions-serve/**'] 
+    }
+    
+  },
 })
+
